@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "classnames": "^2.2.6",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-redux": "^5.0.7",
@@ -21,5 +22,6 @@
   "devDependencies": {
     "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.6"
-  }
+  },
+  "proxy":"http://localhost:8585"
 }

@@ -6,7 +6,7 @@ import { fetchGames } from '../actions'
 
 class GamesPage extends Component {
     componentDidMount() {
-        this.props.fetchGames();
+        this.props.fetchGames(); // fetchgames已经由 connect 连接上了
     }
 
     render() {
