@@ -1,12 +1,11 @@
 import { SET_GAMES } from '../constants';
 
-export const setGames = (games) => {
+const setGames = (games) => {
     return {
         type: SET_GAMES,
         games
     }
 };
-
 
 export const fetchGames = () => {
     return dispatch => {
@@ -15,3 +14,15 @@ export const fetchGames = () => {
             .then(data => dispatch(setGames(data.games)))
     }
 };
+
+export const saveGame = (data) => {
+    return dispatch => {
+        fetch('/api/saveGame', {
+            method: 'post',
+            body: JSON.stringify(data),
+            header: {
+                "content-Type": "application/json"
+            }
+        })
+    }
+}

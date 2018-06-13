@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
 import GamesPage from './components/GamesPage';
+import GameForm from './components/GameForm';
 import registerServiceWorker from './registerServiceWorker';
 
 //redux
@@ -32,6 +33,7 @@ ReactDOM.render(
                 </div>
                 <Route exact path="/" component={App} />
                 <Route exact path="/games" component={GamesPage} />
+                <Route exact path="/games/new" component={GameForm} />
             </div>
         </Router>
     </Provider>,
