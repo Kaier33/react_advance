@@ -15,14 +15,24 @@ export const fetchGames = () => {
     }
 };
 
+const handleResponse = (res) => {
+   if(res.ok){
+       return res.json();
+   }else{
+       let error = new Error(res.statusText);
+       error.response = res;
+       throw error;
+   }
+}
+
 export const saveGame = (data) => {
     return dispatch => {
-        fetch('/api/saveGame', {
+        return fetch('/api/games', {
             method: 'post',
             body: JSON.stringify(data),
-            header: {
-                "content-Type": "application/json"
+            headers: {
+                "Content-Type": "application/json"
             }
-        })
+        }).then(handleResponse)
     }
 }

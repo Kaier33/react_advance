@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import GameCard from './GameCard';
 const GameList = ({ games }) => {
     const emptyMessage = (
         <p>There are no games yet in your collection</p>
     );
     const gameList = (
-        <p>games List</p>
+        <div className="ui four cards">
+            {games.map((game,index) => <GameCard game={game} key={index} />)}
+        </div>
     )
     return (
         <div>
