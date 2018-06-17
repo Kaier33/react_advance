@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import GamesList from './GameList';
-import { fetchGames } from '../actions'
+import { fetchGames ,deleteGame } from '../actions'
 
 class GamesPage extends Component {
     componentDidMount() {
@@ -12,7 +12,7 @@ class GamesPage extends Component {
     render() {
         return (
             <div>
-                <GamesList games={this.props.games} />
+                <GamesList games={this.props.games} deleteGame= {this.props.deleteGame} />
             </div>
         )
     }
@@ -26,4 +26,5 @@ const mapStateToProps = (state) => {
         games: state.games
     }
 }
-export default connect(mapStateToProps, { fetchGames })(GamesPage); 
+//所有由connect连接的, 在会在props中
+export default connect(mapStateToProps, { fetchGames ,deleteGame })(GamesPage); 

@@ -1,21 +1,48 @@
+/*
+ * @Author: Kaier_Chou 
+ * @Date: 2018-06-17 23:04:40 
+ * @Last Modified by:   Kaier_Chou 
+ * @Last Modified time: 2018-06-17 23:04:40 
+ */
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { saveGame } from '../actions/index';
+import { saveGame, fetchGame, updataGame } from '../actions/index';
 import { Redirect } from 'react-router-dom';
 
 class GameForm extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            title: "",
-            // cover: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1528916436239&di=a81121cbc3c77e5dad9cdfac6cbe7c70&imgtype=0&src=http%3A%2F%2Fwww.arinchina.com%2Fupload%2Fportal%2F201806%2F06%2F180106hwf2pywnon8yzm2h.jpg
-            cover: "",
+            _id: this.props.game ? this.props.game._id : null,
+            title: this.props.game ? this.props.game.title : '',
+            cover: this.props.game ? this.props.game.cover : '',
             errors: {},
             loading: false,
             done: false,
+            actionTitle: this.props.game ? 'edit Game' : 'Add new Game',
+            // cover: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1528916436239&di=a81121cbc3c77e5dad9cdfac6cbe7c70&imgtype=0&src=http%3A%2F%2Fwww.arinchina.com%2Fupload%2Fportal%2F201806%2F06%2F180106hwf2pywnon8yzm2h.jpg
         }
     }
+    componentDidMount() {
+        // router 提供了一些方法
+        const { match } = this.props;
+        if (match.params._id) {
+            this.props.fetchGame(match.params._id);
+        }
+    }
+    // shouldComponentUpdate (nextProps, nextState) {
+    //     console.log("更新了")
+    // }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            _id: nextProps.game._id,
+            title: nextProps.game.title,
+            cover: nextProps.game.cover
+        })
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         let errors = {};
@@ -23,18 +50,31 @@ class GameForm extends Component {
         if (this.state.cover === "") { errors.cover = "can't be empty" };
         this.setState({ errors }, function () {
             let isVaild = Object.keys(this.state.errors).length === 0;
-            let { title, cover } = this.state;
             if (isVaild) {
+                let { _id, title, cover } = this.state;
                 this.setState({
                     loading: true
                 })
-                this.props.saveGame({ title, cover }).then(
-                    () => { this.setState({ done: true }) },
-                    (err) => {
-                        err.response.json()
-                            .then(({ errors }) => { this.setState({ errors, loading: false }) })
-                    }
-                )
+                if (_id) {
+                    console.log("updata")
+                    this.props.updataGame({ _id, title, cover }).then(
+                        () => { this.setState({ done: true }) },
+                        (err) => {
+                            err.response.json()
+                                .then(({ errors }) => { this.setState({ errors, loading: false }) })
+                        }
+                    )
+                } else {
+                    console.log("add")
+                    this.props.saveGame({ title, cover }).then(
+                        () => { this.setState({ done: true }) },
+                        (err) => {
+                            err.response.json()
+                                .then(({ errors }) => { this.setState({ errors, loading: false }) })
+                        }
+                    )
+                }
+
             }
         })
     }
@@ -53,10 +93,11 @@ class GameForm extends Component {
             })
         }
     }
+
     render() {
         const form = (
             <form className={classnames("ui", "form", { loading: this.state.loading })} onSubmit={this.handleSubmit.bind(this)}>
-                <h1>Add new game</h1>
+                <h1>{this.state.actionTitle}</h1>
 
                 {!!this.state.errors.global && <div className="ui negative message">{this.state.errors.global}</div>}
 
@@ -100,4 +141,16 @@ class GameForm extends Component {
         )
     }
 }
-export default connect(null, { saveGame })(GameForm) 
+
+const mapStateToProps = (state, props) => {
+    const { match } = props;
+    if (match.params._id) {
+        return {
+            game: state.games.find(item => item._id === match.params._id)
+        }
+    }
+    return { game: null }
+
+}
+
+export default connect(mapStateToProps, { saveGame, fetchGame, updataGame })(GameForm) 
