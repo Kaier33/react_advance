@@ -9,8 +9,8 @@ const validatorInput = (data) => {
     if (validator.isEmpty(data.username)) {
         errors.username = 'username is required'
     }
-    if (validator.isEmpty(data.email)) {
-        errors.email = 'email is required'
+    if (!validator.isEmail(data.email)) {
+        errors.email = 'email must be standardized'
     }
     if (validator.isEmpty(data.password)) {
         errors.password = "password is required";
@@ -22,7 +22,7 @@ const validatorInput = (data) => {
     if (!validator.equals(data.password, data.passwordConfirmation)) {
         errors.passwordConfirmation = 'passwords must match !'
     }
-
+    
     return {
         errors,
         isValid: isEmpty(errors)
@@ -31,10 +31,10 @@ const validatorInput = (data) => {
 
 router.post('/', (req, res) => {
     const { errors, isValid } = validatorInput(req.body)
-    if (!isValid) {
-        res.status(400).json(errors)
+    if (isValid) {
+        res.json({status:'success'})
     } else {
-        res.send("ok")
+        res.status(400).json(errors)
     }
 });
 

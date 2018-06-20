@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import classnames from 'classnames'
+import classnames from 'classnames';
 
 class SignupForm extends Component {
     constructor(props) {
@@ -17,6 +17,11 @@ class SignupForm extends Component {
     static propTypes = {
         userSignupRequest: PropTypes.func.isRequired
     }
+
+    static contextTypes={  // 引入 context中的router
+        router:PropTypes.object
+    }
+
     onChange(e) {
         this.setState({
             [e.target.name]: e.target.value
@@ -26,7 +31,14 @@ class SignupForm extends Component {
         e.preventDefault();
         this.setState({ errors: {}, isLoading: true })
         this.props.userSignupRequest(this.state).then(
-            () => { },
+            () => { 
+                this.setState({isLoading: false})
+                this.props.addFlashMessages({
+                    type:'success',
+                    content:'register success, welcome!'
+                })
+                this.context.router.history.push('/')
+            },
             ({ response }) => { this.setState({ errors: response.data, isLoading: false }) } // ({response})是从data中取得,data是服务器返回的信息
         );
     }
@@ -44,7 +56,6 @@ class SignupForm extends Component {
                         type="text"
                         name='username'
                         className={classnames('form-control', { 'is-invalid': errors.username })}
-                        autoComplete='off'
                     />
                     {errors.username && <span className='form-text text-muted'>{errors.username} </span>}
                 </div>
@@ -55,10 +66,9 @@ class SignupForm extends Component {
                     <input
                         value={this.state.email}
                         onChange={this.onChange.bind(this)}
-                        type="text" //email
+                        type="email"
                         name="email"
                         className={classnames('form-control', { 'is-invalid': errors.email })}
-                        autoComplete='off'
                     />
                     {errors.email && <span className='form-text text-muted'>{errors.email}</span>}
                 </div>
@@ -72,7 +82,6 @@ class SignupForm extends Component {
                         type="password"
                         name="password"
                         className={classnames('form-control', { 'is-invalid': errors.password })}
-                        autoComplete='off'
                     />
                     {errors.password && <span className='form-text text-muted'>{errors.password}</span>}
                 </div>
@@ -86,7 +95,6 @@ class SignupForm extends Component {
                         type="password"
                         name="passwordConfirmation"
                         className={classnames('form-control', { 'is-invalid': errors.passwordConfirmation })}
-                        autoComplete='off'
                     />
                     {errors.passwordConfirmation && <span className='form-text text-muted'>{errors.passwordConfirmation}</span>}
                 </div>

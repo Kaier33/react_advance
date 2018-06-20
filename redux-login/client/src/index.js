@@ -4,7 +4,8 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
 //components
-import NavigationBar from './components/NavigationBar'
+import NavigationBar from './components/NavigationBar';
+import FlashMessageList from './components/flash/FlashMessageList'
 
 // dev-pulgins
 import logger from 'redux-logger';
@@ -31,6 +32,7 @@ ReactDOM.render(
         <Router>
             <Fragment>
                 <NavigationBar />
+                <FlashMessageList />
                 {routes}
             </Fragment>
         </Router>

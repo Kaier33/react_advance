@@ -7,7 +7,7 @@ let app = express();
 app.use(bodyParser.json())  // 解析client传过来的参数
 
 app.get('/', (req, res) => {
-    res.send("hello www2312 ")
+    res.send("hello ww =.= ")
 })
 
 app.use('/api/users', users);
