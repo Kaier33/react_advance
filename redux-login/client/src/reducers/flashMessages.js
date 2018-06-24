@@ -14,7 +14,6 @@ const flaseMessages = (state = [], action = {}) => {
                 }
             ]
         case DELETE_FLASH_MESSAGE:
-            console.log("jinlaile")
             const index = findIndex(state,{id:action.id})
             if(index>=0){
                 return [

@@ -19,6 +19,13 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import routes from './routes';
 import rootReducers from './reducers';
 
+//action
+import { setCurrentUser } from './actions/authActions'
+
+// utils
+import setAuthorizationToken from './utils/setAuthorizationToken';
+import jwtDecode from 'jwt-decode'
+
 
 const store = createStore(
     rootReducers,
@@ -26,6 +33,12 @@ const store = createStore(
         applyMiddleware(thunk, logger)
     )
 )
+
+// 检查是否有登录状态
+if (localStorage.jwtToken) {
+    setAuthorizationToken(localStorage.jwtToken)  //如果有,设置头
+    store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken))) //通过本地存储的让redux去记录登录状态和一些用户信息
+}
 
 ReactDOM.render(
     <Provider store={store}>

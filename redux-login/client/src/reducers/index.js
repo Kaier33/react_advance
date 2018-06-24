@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import auth from './auth';
-import flaseMessages from './flashMessages'
+import flaseMessages from './flashMessages';
+
 
 export default combineReducers({
     auth,

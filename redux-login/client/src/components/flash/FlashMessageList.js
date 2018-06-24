@@ -10,7 +10,6 @@ class FlashMessageList extends Component {
     }
     render() {
         const messageList = this.props.messages  //已由mapStoP引入
-        console.log(messageList)
         return (
             <div className='container'>
                 {messageList.map((message) => {

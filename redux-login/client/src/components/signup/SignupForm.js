@@ -12,14 +12,17 @@ class SignupForm extends Component {
             password: '',
             passwordConfirmation: '',
             isLoading: false,
+            invalid: false,
         }
     }
     static propTypes = {
-        userSignupRequest: PropTypes.func.isRequired
+        userSignupRequest: PropTypes.func.isRequired,
+        addFlashMessages: PropTypes.func.isRequired,
+        isUserExists: PropTypes.func.isRequired
     }
 
-    static contextTypes={  // 引入 context中的router
-        router:PropTypes.object
+    static contextTypes = {  // 引入 context中的router
+        router: PropTypes.object
     }
 
     onChange(e) {
@@ -31,16 +34,44 @@ class SignupForm extends Component {
         e.preventDefault();
         this.setState({ errors: {}, isLoading: true })
         this.props.userSignupRequest(this.state).then(
-            () => { 
-                this.setState({isLoading: false})
+            () => {
+                this.setState({ isLoading: false })
                 this.props.addFlashMessages({
-                    type:'success',
-                    content:'register success, welcome!'
+                    type: 'success',
+                    content: 'register success, welcome!'
                 })
                 this.context.router.history.push('/')
             },
             ({ response }) => { this.setState({ errors: response.data, isLoading: false }) } // ({response})是从data中取得,data是服务器返回的信息
         );
+    }
+
+    checkUserExists(e) {
+        const filed = e.target.name;
+        const val = e.target.value;
+        let errors = this.state.errors;
+        let invalid = this.state.invalid
+        if (val !== '') {
+            this.props.isUserExists(val).then((res) => {
+                // let errors = this.state.errors;
+                if (res.data.user) {
+                    errors[filed] = 'There is user with such ' + filed;
+                    invalid = true;
+                } else {
+                    errors[filed] = '';
+                    invalid = false;
+                }
+                this.setState({ errors, invalid })
+            })
+        } else {
+            errors[filed] = '';
+            if (errors.username || errors.email) {
+                invalid = true;
+            } else {
+                invalid = false;
+            }
+            this.setState({ errors, invalid })
+        }
     }
     render() {
         const { errors } = this.state
@@ -49,10 +80,11 @@ class SignupForm extends Component {
                 <h1> Join our community</h1>
 
                 <div className='form-group'>
-                    <label className='control-label'> UserName</label>
+                    <label className='control-label'> UserName </label>
                     <input
                         value={this.state.value}
                         onChange={this.onChange.bind(this)}
+                        onBlur={this.checkUserExists.bind(this)}
                         type="text"
                         name='username'
                         className={classnames('form-control', { 'is-invalid': errors.username })}
@@ -66,6 +98,7 @@ class SignupForm extends Component {
                     <input
                         value={this.state.email}
                         onChange={this.onChange.bind(this)}
+                        onBlur={this.checkUserExists.bind(this)}
                         type="email"
                         name="email"
                         className={classnames('form-control', { 'is-invalid': errors.email })}
@@ -100,7 +133,7 @@ class SignupForm extends Component {
                 </div>
 
                 <div className='form-group'>
-                    <button disabled={this.state.isLoading} type='submit' className='btn btn-primary btn-lg'> Sign up</button>
+                    <button disabled={this.state.isLoading || this.state.invalid} type='submit' className='btn btn-primary btn-lg'> Sign up</button>
                 </div>
             </form>
         )
