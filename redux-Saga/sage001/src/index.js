@@ -8,14 +8,15 @@ import registerServiceWorker from './registerServiceWorker';
 import rootReducers from './reducers';
 import createSagaMiddleware from 'redux-saga';
 
-import { watchIncrementAsync } from './sagas/index';
+import rootSaga from './sagas/index';
 
 const sagaMiddleware = createSagaMiddleware();  //创建中间件
 
 
 let store = createStore(rootReducers, composeWithDevTools(applyMiddleware(sagaMiddleware)))
 
-sagaMiddleware.run(watchIncrementAsync); //运行saga
+// sagaMiddleware.run(watchIncrementAsync); //运行saga
+sagaMiddleware.run(rootSaga); //运行saga
 ReactDOM.render(
     <Provider store={store}>
         <App />
