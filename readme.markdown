@@ -1,11 +1,16 @@
-## react-router
-```text
-一个react-router的简单举例
-```
+
+## dva/firstDva
+Dva初体验.
+什么是Dva ?  守望先锋了解一下 =。=
 
 ## redux-Saga
 ```text
 redux-Saga的举栗说明🍭
+```
+
+## react-router
+```text
+一个react-router的简单举例
 ```
 
 ## react_crud  
@@ -39,7 +44,7 @@ nodemon                               //避免老是自己去重启server
 body-parser                           //解析request的参数
 lodash                                //常用内裤🤣
 validator                             //校验一些东西,如email,空对象等乱七八糟的
-jsonwebtoken                          //jwt, 区别于传统的session和token的登录验证
+jsonwebtoken                          //jwt登录验证
 
 3. DataBase:
 knex                                  //迁移数据库用的, 也可以用脚本来建表等 
