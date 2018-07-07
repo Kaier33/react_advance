@@ -1,8 +1,30 @@
 import { delay } from 'dva/saga';
+import { routerRedux } from 'dva/router'; //这种方式以后可能会被替换掉
+import queryString from 'query-string';
+import pathToRegexp from 'path-to-regexp'
 export default {
     namespace: 'counterModel',
     state: {
         count: 1
+    },
+    subscriptions: {
+        setup(props) {  // setup 这个函数名是可以随你喜欢去命名 , 可以订阅多个, 都会执行
+            // console.log(props)
+        },
+        onClick({ dispatch }) {
+            document.addEventListener('click', () => {
+                // dispatch({ type: 'add' })
+            })
+        },
+        setupHistory({ dispatch, history }) {
+            history.listen((location) => {  //history有一个监听事件
+                //更多pathToRegexp方法看文档  https://github.com/pillarjs/path-to-regexp
+                const match = pathToRegexp('/counter').exec(location.pathname) 
+                if (match) {
+                    dispatch({ type: 'add' })
+                }
+            })
+        }
     },
     reducers: {
         add(state, action) {
@@ -27,5 +49,14 @@ export default {
             yield call(delay, 1000);
             yield put({ type: 'add' });
         },
+        *asyncLink({ payload }, { call, put }) {
+            yield call(delay, 2000);
+            yield put(routerRedux.push({
+                pathname: '/',
+                search: queryString.stringify({
+                    name: 'Kaier'
+                })
+            }))
+        }
     },
 }

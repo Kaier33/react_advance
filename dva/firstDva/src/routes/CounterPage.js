@@ -2,19 +2,26 @@ import React from 'react';
 import Counter from '../components/Counter'
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
+
+import { counterAdd, counterAsyncAdd, asyncLink } from '../actions'
+
 const CounterPage = (props) => {
-    // console.log(props)
-    const {counter,dispatch}  = props;
+    const { counter, counterAdd, counterAsyncAdd, asyncLink } = props;
     return (
         <div>
-            <Counter count={counter.count} dispatch={dispatch} />
+            <Counter
+                count={counter.count}
+                counterAdd={counterAdd}
+                counterAsyncAdd={counterAsyncAdd}
+                asyncLink={asyncLink}
+            />
         </div>
     )
 }
 
 CounterPage.propTypes = {
-    counter:PropTypes.object,
-    dispatch:PropTypes.func,
+    counter: PropTypes.object,
+    dispatch: PropTypes.func,
 }
 
 const mapStateToProps = (state) => {
@@ -23,5 +30,5 @@ const mapStateToProps = (state) => {
     }
 }
 
-
-export default connect(mapStateToProps)(CounterPage);
+//                                     如果第二个参数加了{} , 那么 props中将不会有 原本的dispatch , 将出现导入的dispatch事件 
+export default connect(mapStateToProps, { counterAdd, counterAsyncAdd, asyncLink })(CounterPage);
