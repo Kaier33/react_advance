@@ -14,6 +14,8 @@ function IndexPage() {
       </ul>
       <br />
       <Link to='/counter'>go to counter </Link>
+      <br/>
+      <Link to='/user'>go to user </Link>
     </div>
   );
 }

@@ -7,8 +7,8 @@ export default {
     state: {
         count: 1
     },
-    subscriptions: {
-        setup(props) {  // setup 这个函数名是可以随你喜欢去命名 , 可以订阅多个, 都会执行
+    subscriptions: {    
+        setup(props) {  // setup 这个函数名是可以随你喜欢去命名 , 可以订阅(监听)多个, 都会执行
             // console.log(props)
         },
         onClick({ dispatch }) {
