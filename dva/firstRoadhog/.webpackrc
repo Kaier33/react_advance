@@ -1,0 +1,6 @@
+{
+    "entry": {
+        "index":"./src/index",
+        "page2":"./src/page2.js"
+    }        
+}

@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
     res.send("hello ww =.= ")
 })
 
-app.use('/api/users', users);
+app.get('/api/users', users);
 app.use('/api/auth', auth);
 app.use('/api/events', events);
 
